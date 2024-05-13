@@ -36,9 +36,9 @@ func NewClient(addr string, opts *engineio.Options) (*Client, error) {
 		return nil, err
 	}
 
-	namespace := fmtNS(u.Path)
+	namespace := ""
 
-	// // Not allowing other than default
+	// Not allowing other than default
 	// u.Path = path.Join("/socket.io", namespace)
 	// u.Path = u.EscapedPath()
 	// if strings.HasSuffix(u.Path, "socket.io") {
@@ -53,13 +53,13 @@ func NewClient(addr string, opts *engineio.Options) (*Client, error) {
 	}, nil
 }
 
-func fmtNS(ns string) string {
-	if ns == aliasRootNamespace {
-		return rootNamespace
-	}
+// func fmtNS(ns string) string {
+// 	if ns == aliasRootNamespace {
+// 		return rootNamespace
+// 	}
 
-	return ns
-}
+// 	return ns
+// }
 
 func (c *Client) Connect() error {
 	dialer := engineio.Dialer{
