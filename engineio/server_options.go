@@ -1,9 +1,10 @@
 package engineio
 
 import (
-	"github.com/liran/go-socket.io/engineio/session"
 	"net/http"
 	"time"
+
+	"github.com/liran/go-socket.io/engineio/session"
 
 	"github.com/liran/go-socket.io/engineio/transport"
 	"github.com/liran/go-socket.io/engineio/transport/polling"
@@ -20,6 +21,8 @@ type Options struct {
 
 	RequestChecker CheckerFunc
 	ConnInitor     ConnInitorFunc
+
+	RequestHeader http.Header
 }
 
 func (c *Options) getRequestChecker() CheckerFunc {

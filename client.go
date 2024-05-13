@@ -3,8 +3,6 @@ package socketio
 import (
 	"errors"
 	"net/url"
-	"path"
-	"strings"
 
 	"github.com/liran/go-socket.io/engineio"
 	"github.com/liran/go-socket.io/engineio/transport"
@@ -13,7 +11,7 @@ import (
 	"github.com/liran/go-socket.io/parser"
 )
 
-var EmptyAddrErr = errors.New("empty addr")
+var ErrEmptyAddr = errors.New("empty addr")
 
 // Client is client for socket.io server
 type Client struct {
@@ -30,7 +28,7 @@ type Client struct {
 // addr like http://asd.com:8080/{$namespace}
 func NewClient(addr string, opts *engineio.Options) (*Client, error) {
 	if addr == "" {
-		return nil, EmptyAddrErr
+		return nil, ErrEmptyAddr
 	}
 
 	u, err := url.Parse(addr)
@@ -40,12 +38,12 @@ func NewClient(addr string, opts *engineio.Options) (*Client, error) {
 
 	namespace := fmtNS(u.Path)
 
-	// Not allowing other than default
-	u.Path = path.Join("/socket.io", namespace)
-	u.Path = u.EscapedPath()
-	if strings.HasSuffix(u.Path, "socket.io") {
-		u.Path += "/"
-	}
+	// // Not allowing other than default
+	// u.Path = path.Join("/socket.io", namespace)
+	// u.Path = u.EscapedPath()
+	// if strings.HasSuffix(u.Path, "socket.io") {
+	// 	u.Path += "/"
+	// }
 
 	return &Client{
 		namespace: namespace,
@@ -68,7 +66,7 @@ func (c *Client) Connect() error {
 		Transports: []transport.Transport{polling.Default},
 	}
 
-	enginioCon, err := dialer.Dial(c.url, nil)
+	enginioCon, err := dialer.Dial(c.url, c.opts.RequestHeader)
 	if err != nil {
 		return err
 	}
